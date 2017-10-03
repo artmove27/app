@@ -1,0 +1,9 @@
+{
+  "name": "test",
+  "lot": 0.005,
+  "v_para": "eth_btc",
+  "period": "*/25 */1 * * * *",
+  "power":  true,
+  "OrderBookLimit" :50,
+  "profit": 1.004
+}

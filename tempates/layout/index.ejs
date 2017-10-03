@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<%-partial("../partials/header")%>
+  <body>
+<div class="hero-section-tw">
+  <div class="hero-section-text-tw">
+    <h2><%- body %></h2>
+    <h5>Здраствуй <%= title %></h5>
+  </div>
+  <div class="show-form-login">
+    <form class="show-password" >
+      <label for="username">Your login</label>
+      <input type="text" value="" placeholder="Enter Username" id="username">
+      <div class="password-wrapper">
+        <label for="password">Your password</label>
+        <input type="password" value="" placeholder="Enter Password" id="password" class="password">
+        <button class="unmask" type="button" title="Mask/Unmask password to check content">Unmask</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<%-partial("../partials/footer")%>
+<%-partial("../partials/index")%>
+
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<%-partial("../partials/header")%>
+  <body>
+  <%-partial("../partials/navigater")%>
+  <%-partial("../partials/header-tow")%>
+    <!-- -->
+    <ul id="nullwallets"></ul>
+    <%-partial("../partials/footer")%>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:3000');
+    socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data' });
+    });
+  </script>
+    </body>
+</html>
