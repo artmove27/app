@@ -5,16 +5,33 @@
   <%-partial("../partials/navigater")%>
   <%-partial("../partials/header-tow")%>
     <!-- -->
+  <div class="building-block-preview">
+    <div class="logInfo">
+    <p class="stat">
+  ВНИМАНИЕ!!! Если Вы, закроете это окно, работа программы прекратится, в следствии чего, могут остаться установленные ордера.
+    </p>
+      </div>
+  </div>
+  <div class="logInfo">
     <ul id="nullwallets"></ul>
+  </div>
+
+
     <%-partial("../partials/footer")%>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io.connect('http://localhost:3000');
     socket.on('news', function (data) {
+      $("#nullwallets").append("<li class='item'>"+data.hello+"</li>");
       console.log(data);
-      socket.emit('my other event', { my: 'data' });
+    //  socket.emit('my other event', { my: 'data' });
     });
+    //socket.on('disconnect', function () {
+   //   socket.disconnect(true);
+      //console.log('disconnect client event....');
+   // });
+    //socket.disconnect(true);
   </script>
     </body>
 </html>
