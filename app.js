@@ -86,12 +86,8 @@ app.get("/",function(req,res,next){
 //
 //var nw = require("./middleware/nw.js");
 app.get("/nw",function(req,res,next){
-  res.render("nw",{"title": "Обнуляем кошельки!"});
+  res.render("nw",{"title": "Утилита CurrencyToBTC"});
 });
-//
-
-
-//
 
 app.post('/nwst', function (req, res,next) {
     if (!req.body) return res.sendStatus(400);
@@ -104,19 +100,23 @@ app.post('/nwst', function (req, res,next) {
     }
      //
         res.render("nws",{"title": "Приложение запущено"});
-    io.on('connection', function (socket) {
-        nullWallet.run(socket);
-        socket.on('disconnect', function () {
-           // io.sockets.emit('user disconnected');
-           log.info("User разорвал соединение -- app");
 
+    });
 
-       });
+io.on('connection', function (socket) {
+  //
+    socket.on('RPC', function(data) {
+        // io.sockets.emit('user disconnected');
+        if(data.access == "nulwallet_start"){
+            nullWallet.run(socket);
+        }
 
-     });
-
+    });
+    socket.on('disconnect', function () {
+        // io.sockets.emit('user disconnected');
+        log.info("User разорвал соединение -- app");
+    });
 });
-
 
 app.use(serveStatic(path.join(__dirname, 'public')));
 
