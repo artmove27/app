@@ -6,9 +6,11 @@
   <%-partial("../partials/header-tow")%>
     <!-- -->
   <div class="building-block-preview">
-    <div class="logInfo">
-    <p class="stat">
-  ВНИМАНИЕ!!! Если Вы, закроете это окно, работа программы прекратится, в следствии чего, могут остаться установленные ордера.
+    <div class="callout warning logInfo-a">
+
+  <h4 align="center">ВНИМАНИЕ!!!</h4>
+      <p>
+      Если Вы, закроете это окно, работа программы прекратится, в следствии чего, могут остаться установленные ордера.
     </p>
       </div>
   </div>
@@ -20,18 +22,23 @@
     <%-partial("../partials/footer")%>
 
   <script src="/socket.io/socket.io.js"></script>
+
   <script>
+    var toolsObjc = "<%=userId%>";
     var socket = io.connect('http://localhost:3000');
-    socket.on('news', function (data) {
+    socket.emit('RPC', { access: {"run":'nulwallet_start',
+    "toolsObjc": toolsObjc
+    }});
+    socket.on(toolsObjc, function (data) {
       $("#nullwallets").append("<li class='item'>"+data.hello+"</li>");
       console.log(data);
-    //  socket.emit('my other event', { my: 'data' });
-    });
+     });
     //socket.on('disconnect', function () {
    //   socket.disconnect(true);
       //console.log('disconnect client event....');
    // });
     //socket.disconnect(true);
+
   </script>
     </body>
 </html>

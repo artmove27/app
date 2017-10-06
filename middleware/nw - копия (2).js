@@ -57,18 +57,17 @@ function estData(){
 //
 var io = {};
 
-function startNopwes(id){
+function startNopwes(){
   //    var app = dt;
   //   var io = req.app.get('io');
-    var StopBalance = new stoper();
     var ob = {};
    this.info = function(obj){
        if(obj.key && obj.sig) {
            log.info("Данные от пользователя Users получены");
 
-           ob[id] = obj;
+           ob = obj;
        } else {
-           ob[id] = obj;
+           ob = obj;
            log.error("Данные от пользователя Users не получены");
            return 1000;
        }
@@ -87,7 +86,7 @@ function startNopwes(id){
             });
              console.log(ob);
             // StopBalance.cfg(ob);
-            StopBalance.start(ob[id]);
+            StopBalance.start(ob);
        // });
 
         }
@@ -102,7 +101,7 @@ function startNopwes(id){
 
 
 
-module.exports = startNopwes;
+module.exports = nullWallet;
 
 //
 
@@ -151,6 +150,54 @@ for(key in wl){
 }
 
 
+
+function Balances() {
+    bittrex.getbalances( function( data, err ) {
+        if(err){
+            errorMsg(err);
+            log.error(err,"STOP-ERROR");
+            StopBalance.stop();
+        } else {
+            var bl = data.result;
+            var lbl = data.result.length - 1;
+            var co = 0;
+            // var kk = [];
+            //  console.log(lbl);
+            for (key in bl) {
+                //   console.log( data.result[key].Currency, data.result[key].Balance );
+                if (data.result[key].Currency != "BTC") {
+
+                    walletInfo[key] = new Wallet();
+                    walletInfo[key].set(data.result[key].Balance);
+                    var cur = data.result[key].Currency;
+                    var cu = {
+                        "vp": cur,
+                        "bln": data.result[key].Balance
+                    };
+                    if (data.result[key].Balance != 0) {
+                        console.log(data.result[key].Currency, data.result[key].Balance);
+                        logmsg.emit(data.result[key].Currency+", "+data.result[key].Balance);
+                        vPrices(cu);
+                    } else {
+                        co++;
+                        console.log(data.result[key].Currency, data.result[key].Balance, "кошелек пуст");
+                        logmsg.emit(data.result[key].Currency+", "+ data.result[key].Balance+", "+ "кошелек пуст");
+                        //  mesacoks(data);
+                    }
+
+                }
+            }
+            console.log(lbl,co);
+            if (lbl == co) {
+                StopBalance.stop();
+                console.log("Stop");
+                logmsg.emit("Выполнение задания завершено");
+            }
+            // console.log(kk);
+//
+        }
+    });
+}
 
 
 function vPrices(vp){
@@ -271,25 +318,21 @@ var counres = new count();
 
 
 
+
+NW = new CronJob('*/15 * * * * *', function() {
+        Balances();
+   // console.log(estData())
+    }, function () {
+        /* This function is executed when the job stops */
+
+    },
+    false /* Start the job right now */
+    //timeZone /* Time zone of this job. */
+);
+
 //console.log(NW.running);
-var NW= {};
-function stoper(id){
-   var salf = this;
-  this.CR = function(){
-     NW[id] = new CronJob('*/15 * * * * *', function () {
-              Balances();
-              // console.log(estData())
-          }, function () {
-              /* This function is executed when the job stops */
 
-          },
-          false /* Start the job right now */
-          //timeZone /* Time zone of this job. */
-      );
-      return NW[id];
-  }
-
-    //
+function stoper(){
     this.start = function(ojc){
         if(ojc){
             bittrex.options({
@@ -301,20 +344,19 @@ function stoper(id){
 
         }
         logmsg.emit("Инициализация...");
-        if(!salf.CR().running){
-            salf.CR().start();
+        if(!NW.running){
+            NW.start();
         }
     }
     //
-    this.stop = function(id){
-        console.log(id);
-        if(salf.CR().running){
-            salf.CR().stop();
+    this.stop = function(){
+        if(NW.running){
+            NW.stop();
         }
     }
     this.test = function(obj){
         console.log(obj);
     }
 }
-
+var StopBalance = new stoper();
 
